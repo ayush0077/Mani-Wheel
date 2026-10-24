@@ -1,0 +1,176 @@
+@import "tailwindcss";
+
+:root {
+  /* Catppuccin Mocha palette */
+  --ctp-base: #1e1e2e;
+  --ctp-mantle: #181825;
+  --ctp-crust: #0d0f14;
+  --ctp-surface0: #313244;
+  --ctp-surface1: #45475a;
+  --ctp-surface2: #585b70;
+  --ctp-overlay0: #6c7086;
+  --ctp-overlay1: #7f849c;
+  --ctp-overlay2: #9399b2;
+  --ctp-subtext0: #a6adc8;
+  --ctp-subtext1: #bac2de;
+  --ctp-text: #cdd6f4;
+  --ctp-lavender: #b4befe;
+  --ctp-blue: #89b4fa;
+  --ctp-sapphire: #74c7ec;
+  --ctp-sky: #89dceb;
+  --ctp-teal: #94e2d5;
+  --ctp-green: #a6e3a1;
+  --ctp-yellow: #f9e2af;
+  --ctp-peach: #fab387;
+  --ctp-maroon: #eba0ac;
+  --ctp-red: #f38ba8;
+  --ctp-mauve: #cba6f7;
+  --ctp-pink: #f5c2e7;
+  --ctp-flamingo: #f2cdcd;
+  --ctp-rosewater: #f5e0dc;
+}
+
+@theme inline {
+  --color-background: var(--ctp-crust);
+  --color-foreground: var(--ctp-text);
+  --font-mono: var(--font-jetbrains-mono), var(--font-geist-mono), ui-monospace, monospace;
+  --font-sans: var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-serif: var(--font-bodoni), "Bodoni Moda", Didot, "Bodoni MT", Georgia, serif;
+  --font-cursive: var(--font-cursive), "Great Vibes", "Alex Brush", "Brush Script MT", cursive;
+}
+
+.font-editorial-name {
+  font-family: var(--font-cursive), "Great Vibes", "Alex Brush", "Brush Script MT", cursive;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #0d0f14;
+  color: #cdd6f4;
+}
+
+body {
+  font-family: var(--font-sans);
+}
+
+/* Terminal cursor blink */
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.cursor-blink {
+  animation: cursor-blink 1s step-end infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor-blink {
+    animation: none;
+    opacity: 1;
+  }
+}
+
+/* Fade in animation */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in {
+    animation: none;
+  }
+}
+
+/* Terminal text glow effect */
+.text-glow-green {
+  text-shadow: 0 0 10px rgba(166, 227, 161, 0.45);
+}
+
+.text-glow-blue {
+  text-shadow: 0 0 10px rgba(137, 180, 250, 0.45);
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0d0f14;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #252836;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3b3f54;
+}
+
+/* Enhanced golden mote float with complex path and opacity variation */
+@keyframes mote-float {
+  0% {
+    transform: translateY(0px) translateX(0px) scale(1);
+    opacity: var(--mote-opacity, 0.3);
+  }
+  25% {
+    transform: translateY(-18px) translateX(5px) scale(1.1);
+  }
+  50% {
+    transform: translateY(-28px) translateX(-3px) scale(0.95);
+    opacity: calc(var(--mote-opacity, 0.3) * 1.4);
+  }
+  75% {
+    transform: translateY(-14px) translateX(8px) scale(1.05);
+  }
+  100% {
+    transform: translateY(0px) translateX(0px) scale(1);
+    opacity: var(--mote-opacity, 0.3);
+  }
+}
+
+/* Merit counter fly-up animation — triggered on each spin completion */
+@keyframes merit-fly-up {
+  0% {
+    opacity: 1;
+    transform: translateY(0) translateX(-50%) scale(1);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-20px) translateX(-50%) scale(1.1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-36px) translateX(-50%) scale(0.9);
+  }
+}
+
+.animate-merit-fly {
+  animation: merit-fly-up 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @keyframes mote-float {
+    0%, 100% {
+      transform: none;
+    }
+  }
+  .animate-merit-fly {
+    animation: none;
+  }
+}
