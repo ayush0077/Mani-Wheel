@@ -184,7 +184,7 @@ export default function KarmaBlessing({ lastSpinCount }: KarmaBlessingProps) {
             aria-hidden="true"
           />
           <h1 className="relative text-xl sm:text-2xl md:text-3xl font-extrabold tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-[#f3ba47] via-[#f7d68a] to-[#2ba89c] uppercase drop-shadow-sm">
-            SPIN THE MANI WHEEL TO RECEIVE KARMA
+            SPIN THE MANI WHEEL 3 TIMES TO RECEIVE KARMA
           </h1>
         </div>
 

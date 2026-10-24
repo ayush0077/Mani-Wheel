@@ -9,20 +9,20 @@ export async function GET() {
       path.join(process.cwd(), "public", "mani wheel"),
       path.join(process.cwd(), "maniwheel"),
       path.join(process.cwd(), "mani wheel"),
-      path.join(process.cwd(), "..", "personal-website", "public", "maniwheel"),
-      path.join(process.cwd(), "..", "personal-website", "maniwheel"),
     ];
 
     let dirToScan = "";
     for (const d of candidateDirs) {
-      if (fs.existsSync(d) && fs.readdirSync(d).some((f) => /\.(webp|png|jpg|jpeg)$/i.test(f))) {
+      if (
+        fs.existsSync(/*turbopackIgnore: true*/ d) &&
+        fs.readdirSync(/*turbopackIgnore: true*/ d).some((f) => /\.(webp|png|jpg|jpeg)$/i.test(f))
+      ) {
         dirToScan = d;
         break;
       }
     }
 
     if (!dirToScan) {
-      // Fallback generator for 102 frames
       const fallback = Array.from({ length: 102 }, (_, i) => {
         const padded = String(i).padStart(3, "0");
         return `/maniwheel/IloveMP4_Tibetan_prayer_wheel_rotating_20261021180609_${padded}.webp`;
@@ -30,7 +30,7 @@ export async function GET() {
       return NextResponse.json({ totalFrames: 102, frames: fallback });
     }
 
-    const allFiles = fs.readdirSync(dirToScan);
+    const allFiles = fs.readdirSync(/*turbopackIgnore: true*/ dirToScan);
 
     const frameFiles = allFiles
       .filter((f) => /\.(webp|png|jpg|jpeg)$/i.test(f))
@@ -42,7 +42,13 @@ export async function GET() {
         return numA - numB;
       });
 
-    const frames = frameFiles.map((f) => `/maniwheel/${encodeURIComponent(f)}`);
+    const frames =
+      frameFiles.length > 0
+        ? frameFiles.map((f) => `/maniwheel/${encodeURIComponent(f)}`)
+        : Array.from({ length: 102 }, (_, i) => {
+            const padded = String(i).padStart(3, "0");
+            return `/maniwheel/IloveMP4_Tibetan_prayer_wheel_rotating_20261021180609_${padded}.webp`;
+          });
 
     return NextResponse.json({
       totalFrames: frames.length,

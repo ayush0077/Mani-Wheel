@@ -4,13 +4,13 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { useScroll, motion, AnimatePresence } from "framer-motion";
 import Overlay from "./Overlay";
 
-// Default fallback total frames (150 frames: 000 to 149)
-export const DEFAULT_TOTAL_FRAMES = 150;
+// Default fallback total frames (128 frames: 000 to 127)
+export const DEFAULT_TOTAL_FRAMES = 128;
 
 export const getFallbackFramePath = (index: number) => {
   const clamped = Math.max(0, index);
   const padded = String(clamped).padStart(3, "0");
-  return `/sequence/frame_${padded}_delay-0.067s.webp`;
+  return `/sequence/mylivewallpapers-com-Torii-Lone-Samurai-4K_${padded}.webp`;
 };
 
 interface ScrollyCanvasProps {
@@ -131,7 +131,7 @@ export default function ScrollyCanvas({ onReturnToTerminal }: ScrollyCanvasProps
       try {
         const res = await fetch("/api/sequence-info");
         if (res.ok) {
-          const data = await res.json();
+          const data = (await res.json()) as { frames?: string[] };
           if (Array.isArray(data.frames) && data.frames.length > 0) {
             frameUrls = data.frames;
           }

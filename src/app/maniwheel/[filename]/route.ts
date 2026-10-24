@@ -9,18 +9,27 @@ export async function GET(
   const { filename } = await params;
   const decoded = decodeURIComponent(filename);
 
+  // If running in Cloudflare Workers, fetch directly from the ASSETS binding
+  try {
+    const { getCloudflareContext } = await import("@opennextjs/cloudflare");
+    const ctx = getCloudflareContext();
+    if (ctx?.env?.ASSETS) {
+      return await ctx.env.ASSETS.fetch(request);
+    }
+  } catch {
+    // Fall back to Node.js filesystem lookup in local dev
+  }
+
   const candidatePaths = [
     path.join(process.cwd(), "public", "maniwheel", decoded),
     path.join(process.cwd(), "public", "mani wheel", decoded),
     path.join(process.cwd(), "maniwheel", decoded),
     path.join(process.cwd(), "mani wheel", decoded),
-    path.join(process.cwd(), "..", "personal-website", "maniwheel", decoded),
-    path.join(process.cwd(), "..", "personal-website", "public", "maniwheel", decoded),
   ];
 
   for (const filePath of candidatePaths) {
-    if (fs.existsSync(filePath)) {
-      const fileBuffer = fs.readFileSync(filePath);
+    if (fs.existsSync(/*turbopackIgnore: true*/ filePath)) {
+      const fileBuffer = fs.readFileSync(/*turbopackIgnore: true*/ filePath);
       const ext = path.extname(decoded).toLowerCase();
       let contentType = "image/webp";
       if (ext === ".png") contentType = "image/png";

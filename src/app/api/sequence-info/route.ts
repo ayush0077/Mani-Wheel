@@ -7,25 +7,29 @@ export async function GET() {
     const candidateDirs = [
       path.join(process.cwd(), "public", "sequence"),
       path.join(process.cwd(), "sequence"),
-      path.join(process.cwd(), "..", "personal-website", "public", "sequence"),
-      path.join(process.cwd(), "..", "personal-website", "sequence"),
-      path.join(process.cwd(), "..", "Personal Website", "public", "sequence"),
-      path.join(process.cwd(), "..", "Personal Website", "sequence"),
     ];
 
     let dirToScan = "";
     for (const d of candidateDirs) {
-      if (fs.existsSync(d) && fs.readdirSync(d).some((f) => /\.(webp|png|jpg|jpeg)$/i.test(f))) {
+      if (
+        fs.existsSync(/*turbopackIgnore: true*/ d) &&
+        fs.readdirSync(/*turbopackIgnore: true*/ d).some((f) => /\.(webp|png|jpg|jpeg)$/i.test(f))
+      ) {
         dirToScan = d;
         break;
       }
     }
 
+    const fallbackFrames = Array.from({ length: 128 }, (_, i) => {
+      const padded = String(i).padStart(3, "0");
+      return `/sequence/mylivewallpapers-com-Torii-Lone-Samurai-4K_${padded}.webp`;
+    });
+
     if (!dirToScan) {
-      return NextResponse.json({ totalFrames: 0, frames: [] });
+      return NextResponse.json({ totalFrames: fallbackFrames.length, frames: fallbackFrames });
     }
 
-    const allFiles = fs.readdirSync(dirToScan);
+    const allFiles = fs.readdirSync(/*turbopackIgnore: true*/ dirToScan);
 
     // Match ANY image file ending with webp, png, jpg, jpeg
     const frameFiles = allFiles
@@ -46,6 +50,10 @@ export async function GET() {
     });
   } catch (err) {
     console.error("Error reading sequence info:", err);
-    return NextResponse.json({ totalFrames: 0, frames: [] });
+    const fallbackFrames = Array.from({ length: 128 }, (_, i) => {
+      const padded = String(i).padStart(3, "0");
+      return `/sequence/mylivewallpapers-com-Torii-Lone-Samurai-4K_${padded}.webp`;
+    });
+    return NextResponse.json({ totalFrames: fallbackFrames.length, frames: fallbackFrames });
   }
 }
